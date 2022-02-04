@@ -9,6 +9,12 @@ EMPTY = 0
 BLACK = 1 
 WHITE = 2 
 
+COLOR_MAPPING = {
+    ".": 0,
+    "B": 1,
+    "W": 2
+}
+
 def isBlackWhite(color):
     return (color == BLACK) or (color == WHITE)
     

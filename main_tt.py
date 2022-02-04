@@ -5,9 +5,9 @@ from boolean_negamax_tt import timed_solve
 import time
 import sys
 
-def test_solve_with_tt(state, player, time_limit):
+def test_solve_with_tt(state, player, time_limit, board):
     tt = TranspositionTable()
-    isWin, win_move, timeUsed, node_count =  timed_solve(state, tt, time_limit)
+    isWin, win_move, timeUsed, node_count =  timed_solve(state, tt, time_limit, board)
     
     if(isWin == None):
         isWin = "?"
@@ -38,6 +38,6 @@ if __name__ == "__main__":
 
         state = Clobber_1d(board, player)
         # Playing the game, main 
-        test_solve_with_tt(state, player, time_limit)
+        test_solve_with_tt(state, player, time_limit, board)
     else:
         print(f"Misisng Arguments")
