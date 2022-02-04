@@ -4,6 +4,9 @@ tt = TranspositionTable()
 
 board = "BWBWBWBW"
 hash_list = tt.generate_hash(board)
+# Check if all elements are unique.
+assert len(set(hash_list)) == len(hash_list)
+
 hash = tt.board_hash(board, hash_list)
 
 third = hash_list[2]
