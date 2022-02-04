@@ -16,7 +16,8 @@ def negamaxBoolean(state, time_limit):
 
     if state.endOfGame():
         return state.staticallyEvaluateForToPlay(), win_move
-    for m in state.legalMoves():
+    legalmoves = state.legalMoves() 
+    for m in legalmoves:
         state.play(m)
         success = not negamaxBoolean(state, time_limit)[0]
         timeUsed = time.process_time() - start

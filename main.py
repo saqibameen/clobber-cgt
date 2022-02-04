@@ -27,7 +27,7 @@ def solveAndPrint(state, player, time_limit, solver):
     elif(player == WHITE and not isWin):
         isWin = "B"
 
-    print("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
+    print("{} {} {:.64f} {}\n".format(isWin, win_move, timeUsed, node_count))
 
 def testGames(solver):
     for i in range(2,25):

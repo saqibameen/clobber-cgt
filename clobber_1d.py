@@ -8,6 +8,7 @@
 import random
 from game_basics import EMPTY, BLACK, WHITE, isEmptyBlackWhite, opponent
 
+count = 0
 class Clobber_1d(object):
 # Board is stored in 1-d array of EMPTY, BLACK, WHITE
 
@@ -95,6 +96,9 @@ class Clobber_1d(object):
         return len(self.legalMoves()) == 0
 
     def legalMoves(self):
+        global count
+        print("legalMoves() is called: ", count)
+        count += 1
         # To do: this is super slow. Should keep track of moves
         moves = []
         opp = self.opp_color()
