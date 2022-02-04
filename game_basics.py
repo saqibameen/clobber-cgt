@@ -15,12 +15,6 @@ COLOR_MAPPING = {
     "W": 2
 }
 
-NUMBER_TO_COLOR = {
-    0: ".",
-    1: "B",
-    2: "W"
-}
-
 
 def isBlackWhite(color):
     return (color == BLACK) or (color == WHITE)

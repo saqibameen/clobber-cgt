@@ -5,7 +5,7 @@
 import random
 import time
 
-from game_basics import BLACK, COLOR_MAPPING, NUMBER_TO_COLOR, colorAsString, isBlackWhite, opponent
+from game_basics import BLACK, COLOR_MAPPING, colorAsString, isBlackWhite, opponent
 
 win_move = None
 node_count = 0
@@ -26,13 +26,10 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list):
         return storeResult(tt, board_hash, result), win_move
     for m in state.legalMoves():
         state.play(m)
-        changed_position = hash_list[NUMBER_TO_COLOR[state.opp_color()]][m[1]]
-        print(changed_position)
-        current = 2 + 1 - state.opp_color()
-        updated_hash = board_hash ^ changed_position ^ hash_list[NUMBER_TO_COLOR[current]][m[1]] ^ hash_list[NUMBER_TO_COLOR[current]][m[0]]
-
-        # print(updated_hash, changed_position, m, state.opp_color())
-        # state.print()
+        opposite = state.opp_color()
+        current = 2 + 1 - opposite
+        changed_position = hash_list[opposite-1][m[1]]
+        updated_hash = board_hash ^ changed_position ^ hash_list[current-1][m[1]] ^ hash_list[current-1][m[0]]
         success = not negamaxBoolean(state, tt, time_limit, updated_hash, hash_list)[0]
         state.undoMove()
         timeUsed = time.process_time() - start
@@ -56,16 +53,14 @@ def timed_solve(state, tt, time_limit, board):
     return win, m, timeUsed, node_count
 
 def generate_hash(board):
-        hash_list = {'B': [], 'W': []}
-        for index in range(len(board)):
-            hash_B = random.randint(1, 2**63 - 1) + index + COLOR_MAPPING['B']
-            hash_w = random.randint(1, 2**63 - 1) + index + COLOR_MAPPING['W'] 
-            hash_list['B'].append(hash_B)
-            hash_list['W'].append(hash_w)
+        hash_list = [[],[]]
+        for _ in range(len(board)):
+            hash_list[0].append(random.randint(1, 2**64 - 1))
+            hash_list[1].append(random.randint(1, 2**64 - 1))
 
         # Check all the entries are unique.
-        assert len(hash_list['B']) == len(set(hash_list['B']))
-        assert len(hash_list['W']) == len(set(hash_list['W']))
+        assert len(hash_list[0]) == len(set(hash_list[0]))
+        assert len(hash_list[1]) == len(set(hash_list[1]))
 
         return hash_list
 
@@ -75,5 +70,5 @@ def generate_board_hash(board, hash_list):
     hash_code = 0
     for index, value in enumerate(board):
         if value == '.': continue
-        hash_code = hash_code ^ hash_list[value][index]
+        hash_code = hash_code ^ hash_list[COLOR_MAPPING[value]-1][index]
     return hash_code
