@@ -58,12 +58,14 @@ def worst_case_testing():
 
 def random_test_suit_testing():
     # Generate random board. With a random number of 'B','W','.' of length 64.
-    for _ in range(50):
+    for _ in range(1):
         board = ""
         for i in range(64):
             # Randomly select from ["W", "B", "."]
             board += random.choice(["W", "B", "."])
 
+        board = "BW...WBBBW.WBB..WWWWWW.WBBWWW.WWWBBW.WWB.BWBW.BBBBW.BWBB..BWWWW."
+        print("board: ", board)
         state = Clobber_1d(board, BLACK)
         state2 = Clobber_1d(board, BLACK)
 
@@ -71,7 +73,10 @@ def random_test_suit_testing():
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, BLACK, 100, board, zobrist_solver)
         isWin2, win_move2, timeUsed2, node_count2 =test_solve_with_tt(state2, BLACK, 100, board, regular_hash_solver)
 
-        if(isWin != None):
+        print("isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
+        print("isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
+
+        if(isWin == "W" or isWin == "B"):
             assert isWin == isWin2 and win_move == win_move2 and node_count == node_count2
         else:
             assert isWin == isWin2 and win_move == win_move2
