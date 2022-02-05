@@ -8,17 +8,13 @@ import sys
 def test_solve_with_tt(state, player, time_limit, board):
     tt = TranspositionTable()
     isWin, win_move, timeUsed, node_count =  timed_solve(state, tt, time_limit, board)
-    
+
     if(isWin == None):
         isWin = "?"
-    elif(player == BLACK and isWin):
+    elif((player == BLACK and isWin) or (player == WHITE and not isWin)):
         isWin = "B"
-    elif(player == BLACK and not isWin):
+    elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
         isWin = "W"
-    elif(player == WHITE and isWin):
-        isWin = "W"
-    elif(player == WHITE and not isWin):
-        isWin = "B"
 
     print("{} {} {:.64f} {}\n".format(isWin, win_move, timeUsed, node_count))
 

@@ -15,29 +15,6 @@ COLOR_MAPPING = {
 class TranspositionTable():
 # Table is stored in a dictionary, with board code as key, 
 # and minimax score as the value
-
-    # Calculate a random has for each (index, value) pair. 0 for empty.
-    def generate_hash(self, board):
-        hash_list = []
-        for index, value in enumerate(board):
-            # if i == ".", append 0
-            if value == ".":
-                hash_list.append(0)
-            else:
-                # Generate random hash based on (index, value) pair
-                # 64-bit random hash
-                hash = random.randint(1, 2**64 - 1) + index + (COLOR_MAPPING[value] * 2) 
-                hash_list.append(hash)
-        return hash_list
-
-    # Initial board hash
-    def board_hash(self, board, hash_list): 
-        # Calculate hash code
-        hash_code = 0
-        for hash in hash_list:
-            hash_code = hash_code ^ hash
-        return hash_code
-
     # Empty dictionary
     def __init__(self):
         self.table = {}
