@@ -3,10 +3,11 @@ from game_basics import BLACK, WHITE, colorAsString
 from transposition_table_simple import TranspositionTable
 from boolean_negamax_tt import timed_solve as timed_solve_hash
 from negamax_no_hash import timed_solve as timed_solve_no_hash
+from bool_negamax_o4 import timed_solve as timed_solve_o4
 import time
 import sys
 
-mode = "test" # run or test
+mode = "run" # run or test
 
 def test_solve_with_tt(state, player, time_limit, board):
     tt = TranspositionTable()
@@ -21,6 +22,25 @@ def test_solve_with_tt(state, player, time_limit, board):
 
     result = "{} {}".format(isWin, win_move)
     return result, timeUsed
+    # print("{} {} {:.64f} {}\n".format(isWin, win_move, timeUsed, node_count))
+
+
+
+def test_solve_with_tt_o4(state, player, time_limit, board):
+    tt = TranspositionTable()
+    isWin, win_move, timeUsed, node_count =  timed_solve_o4(state, tt, time_limit, board)
+
+    if(isWin == None):
+        isWin = "?"
+    elif((player == BLACK and isWin) or (player == WHITE and not isWin)):
+        isWin = "B"
+    elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
+        isWin = "W"
+
+    result = "{} {}".format(isWin, win_move)
+    return result, timeUsed
+    # print("{} {} {:.64f} {}\n".format(isWin, win_move, timeUsed, node_count))
+    
 
 def test_solve_with_tt_no_hash(state, player, time_limit, board):
     tt = TranspositionTable()
@@ -33,6 +53,7 @@ def test_solve_with_tt_no_hash(state, player, time_limit, board):
     elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
         isWin = "W"
 
+    # print("{} {} {:.64f} {}\n".format(isWin, win_move, timeUsed, node_count))
     result = "{} {}".format(isWin, win_move)
     return result, timeUsed
 
@@ -49,7 +70,7 @@ def verify_results_zobrist_hash():
             player = WHITE
 
         state = Clobber_1d(board, player)
-        result_hash, timeUsed_hash = test_solve_with_tt(state, player, time_limit, board)
+        result_hash, timeUsed_hash = test_solve_with_tt_o4(state, player, time_limit, board)
         result_no_hash, timeUsed_no_hash = test_solve_with_tt_no_hash(state, player, time_limit, board)
 
         if result_hash != result_no_hash:
@@ -63,7 +84,7 @@ def verify_results_zobrist_hash():
 
 if __name__ == "__main__":
 
-    if mode == "run":
+    if mode == "test":
         if(len(sys.argv) == 4):
             board = str(sys.argv[1]).upper()
             player = str(sys.argv[2]).upper()
@@ -78,7 +99,21 @@ if __name__ == "__main__":
 
             state = Clobber_1d(board, player)
             # Playing the game, main 
-            test_solve_with_tt(state, player, time_limit, board)
+            # test_solve_with_tt_no_hash(state, player, time_limit, board)
+
+
+            print("NOWWWWWWWWWWWWWWWWWW")
+            print("NOWWWWWWWWWWWWWWWWWW")
+            print("NOWWWWWWWWWWWWWWWWWW")
+            print("NOWWWWWWWWWWWWWWWWWW")
+            print("NOWWWWWWWWWWWWWWWWWW")
+            print("NOWWWWWWWWWWWWWWWWWW")
+            print("NOWWWWWWWWWWWWWWWWWW")
+            print("NOWWWWWWWWWWWWWWWWWW")
+
+
+
+            test_solve_with_tt_o4(state, player, time_limit, board)
         else:
             print(f"Misisng Arguments")
 
