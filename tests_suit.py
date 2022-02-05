@@ -67,7 +67,7 @@ def random_test_suit_testing():
     # Generate random board. With a random number of 'B','W','.' of length 64.
     for _ in range(50):
         board = ""
-        for i in range(64):
+        for i in range(55):
             # Randomly select from ["W", "B", "."]
             board += random.choice(["W", "B", "."])
 
@@ -98,5 +98,5 @@ def random_test_suit_testing():
             assert isWin == isWin2 and win_move == win_move2 
 
 
-worst_case_testing()
-# random_test_suit_testing()
+# worst_case_testing()
+random_test_suit_testing()
