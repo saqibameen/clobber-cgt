@@ -105,6 +105,60 @@ class Clobber_1d(object):
                 if i < last and self.board[i+1] == opp:
                     moves.append((i, i+1))
         return moves
+    
+    def legalMovesForBoth(self):
+        moves = []
+        opp_moves = []
+        opp = self.opp_color()
+        last = len(self.board) - 1
+        for i, p in enumerate(self.board):
+            if p == self.toPlay:
+                if i > 0 and self.board[i-1] == opp:
+                    moves.append((i, i-1))
+                    opp_moves.append((i-1, i))
+                if i < last and self.board[i+1] == opp:
+                    moves.append((i, i+1))
+                    opp_moves.append((i+1, i))
+        return moves, opp_moves
+        
+    def update_legal_moves(self, current_legal_moves, opp_legal_moves, m, current, opposite):
+        current_copy = current_legal_moves.copy()
+        opp_copy = opp_legal_moves.copy()
+        
+        src, to = m
+        
+        elements_to_be_removed_from_current = [m]
+        elements_to_be_removed_from_opposite = [(to, src)]
+
+        # Check if there is next element. 
+        if(to > src):
+            if (to != len(self.board) - 1): # Next element.
+                if (self.board[to + 1] == current):
+                    elements_to_be_removed_from_current.append((to + 1, to))
+                    elements_to_be_removed_from_opposite.append((to , to + 1))
+                elif(self.board[to + 1] == opposite):
+                    current_copy.append((to, to + 1))
+                    opp_copy.append((to + 1, to))
+            if(src != 0 and self.board[src - 1] == opposite): # Prev element.
+                    elements_to_be_removed_from_current.append((src, src - 1))
+                    elements_to_be_removed_from_opposite.append((src - 1, src))
+        else:
+            if (to != 0): 
+                if(self.board[to - 1] == current):
+                    elements_to_be_removed_from_current.append((to - 1, to))
+                    elements_to_be_removed_from_opposite.append((to , to - 1))
+                elif(self.board[to - 1] == opposite):
+                    current_copy.append((to, to - 1))
+                    opp_copy.append((to - 1, to))
+            if(src != len(self.board) - 1 and self.board[src + 1] == opposite): 
+                elements_to_be_removed_from_current.append((src, src + 1))
+                elements_to_be_removed_from_opposite.append((src + 1, src))
+
+        # Remove the elements from copies in log(N)
+        current_copy = [e for e in current_copy if e not in elements_to_be_removed_from_current]
+        opp_copy = [e for e in opp_copy if e not in elements_to_be_removed_from_opposite]
+
+        return current_copy, opp_copy
         
     def code(self):
         # To do: this is super slow. Should keep track of code

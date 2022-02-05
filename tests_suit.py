@@ -27,9 +27,14 @@ def test_solve_with_tt(state, player, time_limit, board, solver):
 
 def worst_case_testing():
     # Generate random board. With a random number of 'B','W','.'.
-    for i in range(1, 15):
-        board = "BW" * i
+    for i in range(1, 30):
+        # BW pattern upto i + 1
+        pairs = (i+1) // 2
+        board = "BW" * pairs
+        board =  board[:i]
+
         print("board: ", board)
+
         state = Clobber_1d(board, BLACK)
         state2 = Clobber_1d(board, BLACK)
 
@@ -37,34 +42,36 @@ def worst_case_testing():
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, BLACK, 100, board, zobrist_solver)
         isWin2, win_move2, timeUsed2, node_count2 =test_solve_with_tt(state2, BLACK, 100, board, regular_hash_solver)
 
-        if(isWin != None):
-            assert isWin == isWin2 and win_move == win_move2 and node_count == node_count2
-        else:
-            assert isWin == isWin2 and win_move == win_move2
+        print("isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
+        print("isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
 
+        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B")):
+            assert isWin == isWin2 and win_move == win_move2 
         
         state = Clobber_1d(board, WHITE)
         state2 = Clobber_1d(board, WHITE)
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, WHITE, 100, board, zobrist_solver)
         isWin2, win_move2, timeUsed2, node_count2 =test_solve_with_tt(state2, WHITE, 100, board, regular_hash_solver)
 
-        if(isWin != None):
-            assert isWin == isWin2 and win_move == win_move2 and node_count == node_count2
-        else:
-            assert isWin == isWin2 and win_move == win_move2
+        print("isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
+        print("isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
+
+        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B")):
+            assert isWin == isWin2 and win_move == win_move2 
+
 
 # hashing_correctness_test()
 
 
 def random_test_suit_testing():
     # Generate random board. With a random number of 'B','W','.' of length 64.
-    for _ in range(1):
+    for _ in range(50):
         board = ""
         for i in range(64):
             # Randomly select from ["W", "B", "."]
             board += random.choice(["W", "B", "."])
 
-        board = "BW...WBBBW.WBB..WWWWWW.WBBWWW.WWWBBW.WWB.BWBW.BBBBW.BWBB..BWWWW."
+        # board = "BW...WBBBW.WBB..WWWWWW.WBBWWW.WWWBBW.WWB.BWBW.BBBBW.BWBB..BWWWW."
         print("board: ", board)
         state = Clobber_1d(board, BLACK)
         state2 = Clobber_1d(board, BLACK)
@@ -76,11 +83,8 @@ def random_test_suit_testing():
         print("isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
         print("isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
 
-        if(isWin == "W" or isWin == "B"):
-            assert isWin == isWin2 and win_move == win_move2 and node_count == node_count2
-        else:
-            assert isWin == isWin2 and win_move == win_move2
-
+        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B")):
+            assert isWin == isWin2 and win_move == win_move2 
         
         state = Clobber_1d(board, WHITE)
         state2 = Clobber_1d(board, WHITE)
@@ -90,11 +94,9 @@ def random_test_suit_testing():
         print("isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
         print("isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
         
-        if(isWin == "W" or isWin == "B"):
-            assert isWin == isWin2 and win_move == win_move2 and node_count == node_count2
-        else:
-            assert isWin == isWin2 and win_move == win_move2
+        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B")):
+            assert isWin == isWin2 and win_move == win_move2 
 
 
-# worst_case_testing()
-random_test_suit_testing()
+worst_case_testing()
+# random_test_suit_testing()
