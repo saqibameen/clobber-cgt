@@ -21,7 +21,7 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
     result = tt.lookup(board_hash)
     if result != None:
         return result, win_move
-    if state.endOfGame():
+    if len(current_legal_moves) == 0:
         result = state.staticallyEvaluateForToPlay()
         return storeResult(tt, board_hash, result), win_move
 
