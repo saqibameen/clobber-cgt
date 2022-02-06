@@ -158,45 +158,35 @@ class Clobber_1d(object):
                     opp_moves.append((i+1, i))
         return moves, opp_moves
         
-    def update_legal_moves(self, current_legal_moves, opp_legal_moves, m, current, opposite):
-        current_copy = current_legal_moves.copy()
-        opp_copy = opp_legal_moves.copy()
-        
+    def get_opponents_moves(self, current_legal_moves, m, current, opposite):
+        current_copy = current_legal_moves.copy()        
         src, to = m
         
         elements_to_be_removed_from_current = [m]
-        elements_to_be_removed_from_opposite = [(to, src)]
 
         # Check if there is next element. 
         if(to > src):
             if (to != len(self.board) - 1): # Next element.
                 if (self.board[to + 1] == current):
                     elements_to_be_removed_from_current.append((to + 1, to))
-                    elements_to_be_removed_from_opposite.append((to , to + 1))
                 elif(self.board[to + 1] == opposite):
                     current_copy.append((to, to + 1))
-                    opp_copy.append((to + 1, to))
             if(src != 0 and self.board[src - 1] == opposite): # Prev element.
                     elements_to_be_removed_from_current.append((src, src - 1))
-                    elements_to_be_removed_from_opposite.append((src - 1, src))
         else:
             if (to != 0): 
                 if(self.board[to - 1] == current):
                     elements_to_be_removed_from_current.append((to - 1, to))
-                    elements_to_be_removed_from_opposite.append((to , to - 1))
                 elif(self.board[to - 1] == opposite):
                     current_copy.append((to, to - 1))
-                    opp_copy.append((to - 1, to))
             if(src != len(self.board) - 1 and self.board[src + 1] == opposite): 
                 elements_to_be_removed_from_current.append((src, src + 1))
-                elements_to_be_removed_from_opposite.append((src + 1, src))
 
-        # Remove the elements from copies in log(N)
-        current_copy = [e for e in current_copy if e not in elements_to_be_removed_from_current]
-        opp_copy = [e for e in opp_copy if e not in elements_to_be_removed_from_opposite]
+        # Remove in O(N) and swap.
+        current_copy = [(e[1], e[0]) for e in current_copy if e not in elements_to_be_removed_from_current]
 
-        return current_copy, opp_copy
-        
+        return current_copy
+
     def code(self):
         # To do: this is super slow. Should keep track of code
         c = 0
