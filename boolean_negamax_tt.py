@@ -15,7 +15,7 @@ def storeResult(tt, board_hash, result):
     tt.store(board_hash, result)
     return result
 
-def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_moves):
+def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_moves, current, opposite):
     global win_move, node_count, start
     node_count += 1
     result = tt.lookup(board_hash)
@@ -25,8 +25,6 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
         return storeResult(tt, board_hash, False), win_move
 
     for m in current_legal_moves:
-        current = state.toPlay
-        opposite =  2 + 1 - current
         
         opp_moves = state.get_opponents_moves(current_legal_moves, m, current, opposite)
 
@@ -35,7 +33,7 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
 
         state.play(m)
 
-        success = not negamaxBoolean(state, tt, time_limit, updated_hash, hash_list, opp_moves)[0]
+        success = not negamaxBoolean(state, tt, time_limit, updated_hash, hash_list, opp_moves, opposite, current)[0]
         state.undoMove()
         timeUsed = time.process_time() - start
         if(timeUsed >= time_limit):
@@ -53,7 +51,11 @@ def timed_solve(state, tt, time_limit, board):
     hash_list = generate_hash(board)
     board_hash = generate_board_hash(board, hash_list)
     current_legal_moves = state.legalMoves()
-    win, m = negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_moves)
+    
+    current = state.toPlay
+    opposite =  2 + 1 - current
+
+    win, m = negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_moves, current, opposite)
     timeUsed = time.process_time() - start
     return win, m, timeUsed, node_count
 
