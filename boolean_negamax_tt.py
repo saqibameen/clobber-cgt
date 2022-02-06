@@ -22,8 +22,7 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
     if result != None:
         return result, win_move
     if len(current_legal_moves) == 0:
-        result = state.staticallyEvaluateForToPlay()
-        return storeResult(tt, board_hash, result), win_move
+        return storeResult(tt, board_hash, False), win_move
 
     for m in current_legal_moves:
         current = state.toPlay
@@ -65,8 +64,8 @@ def generate_hash(board):
             hash_list[1].append(random.randint(1, 2**64 - 1))
 
         # Check all the entries are unique.
-        assert len(hash_list[0]) == len(set(hash_list[0]))
-        assert len(hash_list[1]) == len(set(hash_list[1]))
+        # assert len(hash_list[0]) == len(set(hash_list[0]))
+        # assert len(hash_list[1]) == len(set(hash_list[1]))
 
         return hash_list
 
