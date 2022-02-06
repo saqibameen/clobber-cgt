@@ -34,9 +34,10 @@ def test_solve_with_tt(state, player, time_limit, board):
 
 def test_solve_with_tt_ids(state, player, time_limit, board):
     max_depth = 20
-    tt = TranspositionTable()
+    
 
     for depth in range(max_depth):
+        tt = TranspositionTable()
         isWin, win_move, timeUsed, node_count =  timed_solve_ids(state, tt, time_limit, board, depth)
         
         if(isWin == None):
