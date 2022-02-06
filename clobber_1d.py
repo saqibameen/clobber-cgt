@@ -168,19 +168,19 @@ class Clobber_1d(object):
         if(to > src):
             if (to != len(self.board) - 1): # Next element.
                 if (self.board[to + 1] == current):
-                    elements_to_be_removed_from_current.append((to + 1, to))
+                    elements_to_be_removed_from_current.insert(0, (to + 1, to))
                 elif(self.board[to + 1] == opposite):
                     current_copy.append((to, to + 1))
             if(src != 0 and self.board[src - 1] == opposite): # Prev element.
-                    elements_to_be_removed_from_current.append((src, src - 1))
+                    elements_to_be_removed_from_current.insert(0, (src, src - 1))
         else:
             if (to != 0): 
                 if(self.board[to - 1] == current):
-                    elements_to_be_removed_from_current.append((to - 1, to))
+                    elements_to_be_removed_from_current.insert(0, (to - 1, to))
                 elif(self.board[to - 1] == opposite):
                     current_copy.append((to, to - 1))
             if(src != len(self.board) - 1 and self.board[src + 1] == opposite): 
-                elements_to_be_removed_from_current.append((src, src + 1))
+                elements_to_be_removed_from_current.insert(0, (src, src + 1))
 
         # Remove in O(N) and swap.
         current_copy = [(e[1], e[0]) for e in current_copy if e not in elements_to_be_removed_from_current]
