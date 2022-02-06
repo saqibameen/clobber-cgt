@@ -22,7 +22,10 @@ def negamaxBoolean(state, tt, time_limit):
     if state.endOfGame():
         result = state.staticallyEvaluateForToPlay()
         return storeResult(tt, state, result), win_move
+
     for m in state.legalMoves():
+        
+        # print(f"Move: {m}")
         state.play(m)
         success = not negamaxBoolean(state, tt, time_limit)[0]
         state.undoMove()

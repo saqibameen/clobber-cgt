@@ -28,15 +28,14 @@ def test_solve_with_tt(state, player, time_limit, board):
     elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
         isWin = "W"
 
-    print("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
+    # print("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
     result = "{} {}".format(isWin, win_move)
     return result, timeUsed
 
 def test_solve_with_tt_ids(state, player, time_limit, board):
-    max_depth = 20
-    tt = TranspositionTable()
-
+    max_depth = 10
     for depth in range(max_depth):
+        tt = TranspositionTable()
         isWin, win_move, timeUsed, node_count =  timed_solve_ids(state, tt, time_limit, board, depth)
         
         if(isWin == None):
@@ -46,10 +45,13 @@ def test_solve_with_tt_ids(state, player, time_limit, board):
         elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
             isWin = "W"
         
-        print("{} {} {:.4f} {} {}".format(isWin, win_move, timeUsed, node_count, depth))
+        if depth != 0 or win_move is not None:
+            break
+        
+    print("{} {} {:.4f} {} {}".format(isWin, win_move, timeUsed, node_count, depth))
     
-    # result = "{} {}".format(isWin, win_move)
-    # return result, timeUsed
+    result = "{} {}".format(isWin, win_move)
+    return result, timeUsed
 
 def test_solve_with_tt_no_hash(state, player, time_limit, board):
     tt = TranspositionTable()
@@ -66,8 +68,6 @@ def test_solve_with_tt_no_hash(state, player, time_limit, board):
     result = "{} {}".format(isWin, win_move)
     return result, timeUsed
 
-
-
 def verify_results_zobrist_hash():
     test_cases = open("testcases.txt", "r").readlines()
     test_cases = [x.strip() for x in test_cases]
@@ -82,16 +82,16 @@ def verify_results_zobrist_hash():
 
         state = Clobber_1d(board, player)
         result_hash, timeUsed_hash = test_solve_with_tt(state, player, time_limit, board)
-        result_no_hash, timeUsed_no_hash = test_solve_with_tt_no_hash(state, player, time_limit, board)
+        result_ids, timeUsed_ids = test_solve_with_tt_ids(state, player, time_limit, board)
 
-        if result_hash != result_no_hash:
+        if result_hash != result_ids:
             print(f"Test No. {test_no} | Board: {board} | Player to Play: {player_char}")
             print("Result Hash: {} | Time Hash: {:.4f}".format(result_hash, timeUsed_hash))
-            print("Result No Hash: {} | Time No Hash: {:.4f}".format(result_no_hash, timeUsed_no_hash))
+            print("Result IDS: {} | Time IDS: {:.4f}".format(result_ids, timeUsed_ids))
             print()
         else:
-            assert result_hash == result_no_hash
-            print("Test No. {} Passed! | Time Hash: {:.4f} | Time No Hash: {:.4f} | Board: {}".format(test_no, timeUsed_hash, timeUsed_no_hash, board))
+            assert result_hash == result_ids
+            print("Test No. {} Passed! | Time Hash: {:.4f} | Time IDS {:.4f} | Board: {}".format(test_no, timeUsed_hash, timeUsed_ids, board))
 
 if __name__ == "__main__":
     if mode == "run":

@@ -78,7 +78,7 @@ def random_test_suit_testing():
 
         # Playing the game, main
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, BLACK, 100, board, zobrist_solver)
-        isWin2, win_move2, timeUsed2, node_count2 =test_solve_with_tt(state2, BLACK, 100, board, regular_hash_solver)
+        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, BLACK, 100, board, regular_hash_solver)
 
         print("isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
         print("isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
