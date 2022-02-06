@@ -24,8 +24,8 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
     if state.endOfGame():
         result = state.staticallyEvaluateForToPlay()
         return storeResult(tt, board_hash, result), win_move
+
     for m in current_legal_moves:
-        
         current = state.toPlay
         opposite =  2 + 1 - current
         
