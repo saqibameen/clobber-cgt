@@ -33,8 +33,8 @@ class Clobber_1d(object):
         return s
         
     def __init__(self, start_position, first_player = WHITE): 
-    # we take either a board size for standard "BWBW...", 
-    # or a custom start string such as "BWEEWWB"
+        # we take either a board size for standard "BWBW...", 
+        # or a custom start string such as "BWEEWWB"
         if type(start_position) == int:
             self.init_board = Clobber_1d.standard_board(start_position)
         else:
@@ -104,43 +104,6 @@ class Clobber_1d(object):
                     moves.append((i, i-1))
                 if i < last and self.board[i+1] == opp:
                     moves.append((i, i+1))
-        return moves
-
-    def findNeighbors(self, m):
-        min_i = min(m)
-        max_i = max(m)
-
-        idx = [min_i - 1, min_i, max_i, max_i + 1]
-        board = list(map(self.board.__getitem__, idx))
-        return board
-
-
-    def legalMovesO4(self, moves):
-        # To do: this is super slow. Should keep track of moves
-        # moves = []
-        if(len(moves) == 0):
-            moves = []
-            opp = self.opp_color()
-            last = len(self.board) - 1
-            for i, p in enumerate(self.board):
-                if p == self.toPlay:
-                    if i > 0 and self.board[i-1] == opp:
-                        moves.append((i, i-1))
-                    if i < last and self.board[i+1] == opp:
-                        moves.append((i, i+1))
-        else:
-            m = self.moves[-1]
-            board = self.findNeighbors(m)
-            opp = self.opp_color()
-            last = len(board) - 1
-            for i, p in enumerate(board):
-                if p == self.toPlay:
-                    if i > 0 and board[i-1] == opp:
-                        moves.append((i, i-1))
-                    if i < last and board[i+1] == opp:
-                        moves.append((i, i+1))
-
-            moves.remove(m)
         return moves
     
     def legalMovesForBoth(self):
