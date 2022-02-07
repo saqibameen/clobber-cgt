@@ -19,13 +19,13 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
         return result, None
 
     elif result != None:
-        move = result[1][1]
+        # print("result: ", result)
         try:
             idx = current_legal_moves.index(result[1])
             if idx != 0:
                 del current_legal_moves[idx]
-                current_legal_moves.insert(0, (result[0], result[1][1]))
-                print(f"Result: {result} | Move: {move} | Index: {idx}")
+                current_legal_moves.insert(0, result[1])
+                # print(f"Result: {result} | Move: {move} | Index: {idx}")
         except: pass
 
     if len(current_legal_moves) == 0:
@@ -36,7 +36,7 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
         # print(f"Priorty: {state.priority} | board: {state.board}")
         return None, "depthReached"
 
-    # print(current_legal_moves)
+    # print("current_legal_moves: ", current_legal_moves)
     max_priority = 0
     for m in current_legal_moves:
         current = state.toPlay
