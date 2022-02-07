@@ -39,8 +39,7 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
         if(timeUsed >= time_limit):
             win_move = None
             return None, None
-        else:
-            if success:
+        elif success:
                 win_move = m
                 return storeResult(tt, board_hash, True), win_move
     return storeResult(tt, board_hash, False), None

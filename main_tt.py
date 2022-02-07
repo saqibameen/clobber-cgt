@@ -8,7 +8,7 @@ from boolean_negamax_tt_ids import timed_solve as timed_solve_ids
 import time
 import sys
 
-mode = "run" # run or test
+mode = "test" # run or test
 player_to_char = {'.': 0,
                   'B': 1,
                   'W': 2}
@@ -28,27 +28,28 @@ def test_solve_with_tt(state, player, time_limit, board):
     elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
         isWin = "W"
 
-    # print("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
+    if mode == "run":
+        print("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
+
     result = "{} {}".format(isWin, win_move)
     return result, timeUsed
 
 def test_solve_with_tt_ids(state, player, time_limit, board):
-    max_depth = 10
     tt = TranspositionTable()
-    for depth in range(max_depth):
-        isWin, win_move, timeUsed, node_count =  timed_solve_ids(state, tt, time_limit, board, depth)
-        
-        if(isWin == None):
-            isWin = "?"
-        elif((player == BLACK and isWin) or (player == WHITE and not isWin)):
-            isWin = "B"
-        elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
-            isWin = "W"
-        
-        if depth != 0 or win_move is not None:
-            break
-        
-    print("{} {} {:.4f} {} {}".format(isWin, win_move, timeUsed, node_count, depth))
+    isWin, win_move, timeUsed, node_count =  timed_solve_ids(state, tt, time_limit, board)
+    
+    if(isWin == None):
+        isWin = "?"
+    elif((player == BLACK and isWin) or (player == WHITE and not isWin)):
+        isWin = "B"
+    elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
+        isWin = "W"
+    
+    if win_move == "depthReached" or win_move == "timelimitReached":
+            win_move = None
+
+    if mode == "run":
+        print("{} {} {:.4f} {}".format(isWin, win_move, timeUsed, node_count))
     
     result = "{} {}".format(isWin, win_move)
     return result, timeUsed
@@ -64,7 +65,9 @@ def test_solve_with_tt_no_hash(state, player, time_limit, board):
     elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
         isWin = "W"
 
-    print("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
+    if mode == "run":
+        print("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
+
     result = "{} {}".format(isWin, win_move)
     return result, timeUsed
 

@@ -4,6 +4,7 @@ from game_basics import BLACK, WHITE, colorAsString
 from transposition_table_simple import TranspositionTable
 from boolean_negamax_tt import timed_solve as zobrist_solver
 from negamax_no_hash import timed_solve as regular_hash_solver
+from boolean_negamax_tt_ids import timed_solve as ids_solver
 import time
 import sys
 
@@ -37,27 +38,40 @@ def worst_case_testing():
 
         state = Clobber_1d(board, BLACK)
         state2 = Clobber_1d(board, BLACK)
+        state3 = Clobber_1d(board, BLACK)
 
         # Playing the game, main
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, BLACK, 100, board, zobrist_solver)
-        isWin2, win_move2, timeUsed2, node_count2 =test_solve_with_tt(state2, BLACK, 100, board, regular_hash_solver)
+        isWin3, win_move3, timeUsed3, node_count3 = test_solve_with_tt(state3, BLACK, 100, board, ids_solver)
+        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, BLACK, 100, board, regular_hash_solver)
+        if win_move3 == "depthReached" or win_move3 == "timelimitReached":
+            win_move3 = None
 
-        print("isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
-        print("isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
+        print("[Zobrist] isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
+        print("[IDS] isWin3: ", isWin3, " win_move3: ", win_move3, " timeUsed3: ", timeUsed3, " node_count3: ", node_count3)
+        print("[MM] isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
+        print()
 
-        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B")):
-            assert isWin == isWin2 and win_move == win_move2 
+        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B") or (isWin3 != "W" and isWin3 != "B")):
+            assert isWin == isWin2 == isWin3 and win_move == win_move2 == win_move3
         
         state = Clobber_1d(board, WHITE)
         state2 = Clobber_1d(board, WHITE)
+        state3 = Clobber_1d(board, WHITE)
+
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, WHITE, 100, board, zobrist_solver)
-        isWin2, win_move2, timeUsed2, node_count2 =test_solve_with_tt(state2, WHITE, 100, board, regular_hash_solver)
+        isWin3, win_move3, timeUsed3, node_count3 = test_solve_with_tt(state3, WHITE, 100, board, ids_solver)
+        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, WHITE, 100, board, regular_hash_solver)
+        if win_move3 == "depthReached" or win_move3 == "timelimitReached":
+            win_move3 = None
+        
+        print("[Zobrist] isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
+        print("[IDS] isWin3: ", isWin3, " win_move3: ", win_move3, " timeUsed3: ", timeUsed3, " node_count3: ", node_count3)
+        print("[MM] isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
+        print()
 
-        print("isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
-        print("isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
-
-        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B")):
-            assert isWin == isWin2 and win_move == win_move2 
+        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B") or (isWin3 != "W" and isWin3 != "B")):
+            assert isWin == isWin2 == isWin3 and win_move == win_move2 == win_move3
 
 
 # hashing_correctness_test()
@@ -98,5 +112,5 @@ def random_test_suit_testing():
             assert isWin == isWin2 and win_move == win_move2 
 
 
-# worst_case_testing()
-random_test_suit_testing()
+worst_case_testing()
+# random_test_suit_testing()
