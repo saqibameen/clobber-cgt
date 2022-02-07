@@ -15,29 +15,15 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
     node_count += 1
     result = tt.lookup(board_hash)
     
-    if result == True or result == False:
+    if result != None:
         return result, None
-
-    elif result != None:
-        move = result[1][1]
-        try:
-            idx = current_legal_moves.index(result[1])
-            if idx != 0:
-                del current_legal_moves[idx]
-                current_legal_moves.insert(0, (result[0], result[1][1]))
-                print(f"Result: {result} | Move: {move} | Index: {idx}")
-        except: pass
 
     if len(current_legal_moves) == 0:
         return storeResult(tt, board_hash, False), win_move
     
     elif depth == 0:
-        state.heuristicEvaluation(current_legal_moves)
-        # print(f"Priorty: {state.priority} | board: {state.board}")
         return None, "depthReached"
 
-    # print(current_legal_moves)
-    max_priority = 0
     for m in current_legal_moves:
         current = state.toPlay
         opposite =  2 + 1 - current
@@ -50,11 +36,6 @@ def negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_m
         state.undoMove()
         
         if(success == None and condition == "depthReached"):
-            if max_priority < state.priority:
-                max_priority = state.priority
-                storeResult(tt, board_hash, (max_priority, m))
-            state.priority = max_priority
-            
             return None, "depthReached"
         
         # if(success == None and condition == "timelimitReached"):
@@ -77,15 +58,13 @@ def timed_solve(state, tt, time_limit, board):
     start = time.process_time()
     hash_list = generate_hash(board)
     board_hash = generate_board_hash(board, hash_list)
-    current_legal_moves = state.legalMoves()
-    # print(f"Legal Moves: {current_legal_moves}")
+    current_legal_moves, opp_legal_moves = state.legalMovesForBoth()
     max_depth = 1000
     for depth in range(2, max_depth, 2):
         win, m = negamaxBoolean(state, tt, time_limit, 
                                     board_hash, hash_list, 
                                     current_legal_moves, depth)
-        # print(tt)
-        # break
+        
         if m != "depthReached" and m != "timelimitReached":
             break
     

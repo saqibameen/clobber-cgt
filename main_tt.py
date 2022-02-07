@@ -3,7 +3,6 @@ from game_basics import BLACK, WHITE, colorAsString
 from transposition_table_simple import TranspositionTable
 from boolean_negamax_tt import timed_solve as timed_solve_hash
 from negamax_no_hash import timed_solve as timed_solve_no_hash
-from bool_negamax_o4 import timed_solve as timed_solve_o4
 from boolean_negamax_tt_ids import timed_solve as timed_solve_ids
 import time
 import sys

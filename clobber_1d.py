@@ -7,6 +7,8 @@
 
 import random
 from game_basics import EMPTY, BLACK, WHITE, isEmptyBlackWhite, opponent
+import heapq
+
 class Clobber_1d(object):
 # Board is stored in 1-d array of EMPTY, BLACK, WHITE
 
@@ -87,6 +89,10 @@ class Clobber_1d(object):
         winColor = self.winner()
         return winColor == self.toPlay
     
+    def heuristicEvaluation(self, legalmoves):
+        board = self.board
+        self.priority = -len(legalmoves) # board.count(self.toPlay) # set priority as the count of current player's positions
+    
     def moveNumber(self):
         return len(self.moves)
 
@@ -106,6 +112,21 @@ class Clobber_1d(object):
                     moves.append((i, i+1))
         return moves
     
+    def legalMoves_PQ(self):
+        # To do: this is super slow. Should keep track of moves
+        moves = []
+        opp = self.opp_color()
+        last = len(self.board) - 1
+        for i, p in enumerate(self.board):
+            if p == self.toPlay:
+                if i > 0 and self.board[i-1] == opp:
+                    moves.append((-1, (i, i-1)))
+                if i < last and self.board[i+1] == opp:
+                    moves.append((-1, (i, i+1)))
+        
+        # sorted(moves, key=lambda x: x[0], reverse=True)
+        return moves
+    
     def legalMovesForBoth(self):
         moves = []
         opp_moves = []
@@ -122,7 +143,7 @@ class Clobber_1d(object):
         return moves, opp_moves
         
     def get_opponents_moves(self, current_legal_moves, m, current, opposite):
-        current_copy = current_legal_moves.copy()        
+        current_copy = current_legal_moves.copy()   
         src, to = m
         
         elements_to_be_removed_from_current = [m]
@@ -147,7 +168,36 @@ class Clobber_1d(object):
 
         # Remove in O(N) and swap.
         current_copy = [(e[1], e[0]) for e in current_copy if e not in elements_to_be_removed_from_current]
+        return current_copy
 
+    def get_opponents_moves_PQ(self, current_legal_moves, m, current, opposite):
+        current_copy = current_legal_moves.copy()        
+        priority, (src, to) = m
+        
+        elements_to_be_removed_from_current = [(src, to)]
+
+        # Check if there is next element. 
+        if(to > src):
+            if (to != len(self.board) - 1): # Next element.
+                if (self.board[to + 1] == current):
+                    elements_to_be_removed_from_current.insert(0, (to + 1, to))
+                elif(self.board[to + 1] == opposite):
+                    current_copy.append((priority, (to, to + 1)))
+            if(src != 0 and self.board[src - 1] == opposite): # Prev element.
+                elements_to_be_removed_from_current.insert(0, (src, src - 1))
+        else:
+            if (to != 0): 
+                if(self.board[to - 1] == current):
+                    elements_to_be_removed_from_current.insert(0, (to - 1, to))
+                elif(self.board[to - 1] == opposite):
+                    current_copy.append((priority, (to, to - 1)))
+            if(src != len(self.board) - 1 and self.board[src + 1] == opposite): 
+                elements_to_be_removed_from_current.insert(0, (src, src + 1))
+
+
+        # Remove in O(N) and swap.
+        current_copy = [(e[0], (e[1][1], e[1][0])) for e in current_copy if e[1] not in elements_to_be_removed_from_current]
+        # sorted(current_copy, key=lambda x: x[0], reverse=True)
         return current_copy
 
     def code(self):
