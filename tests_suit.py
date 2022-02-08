@@ -148,25 +148,36 @@ def random_test_suit_testing():
         # if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B") or (isWin3 != "W" and isWin3 != "B")):
         #     assert isWin == isWin2 == isWin3 and win_move == win_move2 == win_move3
         
+     
         state = Clobber_1d(board, WHITE)
         state2 = Clobber_1d(board, WHITE)
         state3 = Clobber_1d(board, WHITE)
-
-        
+        state4 = Clobber_1d(board, WHITE)
+        state5 = Clobber_1dC(board, WHITE)
 
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, WHITE, 100, board, zobrist_solver)
         isWin3, win_move3, timeUsed3, node_count3 = test_solve_with_tt(state3, WHITE, 100, board, ids_solver)
+        isWin4, win_move4, timeUsed4, node_count4 = test_solve_with_tt(state4, WHITE, 100, board, ids_no_heuristic_solver)
+        isWin5, win_move5, timeUsed5, node_count5 = test_solve_with_ttC(state5, WHITE, 100, board, timed_solve_hashC)
         isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, WHITE, 100, board, regular_hash_solver)
+        
+
         if win_move3 == "depthReached" or win_move3 == "timelimitReached":
             win_move3 = None
+
+        if win_move4 == "depthReached" or win_move4 == "timelimitReached":
+            win_move4 = None
         
         print("[Zobrist] isWin: ", isWin, " win_move: ", win_move, " timeUsed: ", timeUsed, " node_count: ", node_count)
-        print("[IDS] isWin3: ", isWin3, " win_move3: ", win_move3, " timeUsed3: ", timeUsed3, " node_count3: ", node_count3)
+        print("[Cython] isWin5: ", isWin5, " win_move5: ", win_move5, " timeUsed5: ", timeUsed5, " node_count5: ", node_count5)
+        print("[IDS Heuristic] isWin3: ", isWin3, " win_move3: ", win_move3, " timeUsed3: ", timeUsed3, " node_count3: ", node_count3)
+        print("[IDS No-Heuristic] isWin4: ", isWin4, " win_move4: ", win_move4, " timeUsed4: ", timeUsed4, " node_count4: ", node_count4)
         print("[MM] isWin2: ", isWin2, " win_move2: ", win_move2, " timeUsed2: ", timeUsed2, " node_count2: ", node_count2)
         print()
 
-        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B") or (isWin3 != "W" and isWin3 != "B")):
-            assert isWin == isWin2 == isWin3 and win_move == win_move2 == win_move3
+        if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B") or (isWin3 != "W" and isWin3 != "B") or (isWin4 != "W" and isWin4 != "B")):
+            assert isWin == isWin2 == isWin3 == isWin4 and win_move == win_move2 == win_move3 == win_move4
 
-worst_case_testing()
-# random_test_suit_testing()
+
+# worst_case_testing()
+random_test_suit_testing()

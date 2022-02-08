@@ -9,13 +9,7 @@ import time
 import sys
 
 mode = "run" # run or test
-player_to_char = {'.': 0,
-                  'B': 1,
-                  'W': 2}
 
-char_to_player = {0: '.',
-                  1: 'B',
-                  2: 'W'}
 
 def test_solve_with_tt(state, player, time_limit, board):
     tt = TranspositionTable()
