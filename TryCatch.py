@@ -43,14 +43,6 @@ def test_cases_run():
 
         state = Clobber_1d(board, player)
         isWin, win_move, timeUsed, node_count = solve_with_given_solver(state, player, time_limit, board)
-        
-        # change win_move to from-to
-        if win_move is not None:
-            src, to = str(win_move).split(', ')
-            src = src.replace('(', '')
-            to = to.replace(')', '')
-            win_move = "{}-{}".format(src, to)
-
         tt = open("results_small.txt", "a")
         tt.write(test_case)
         tt.write("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
