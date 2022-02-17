@@ -48,7 +48,8 @@ cdef negamaxBoolean(state, tt, time_limit, board_hash, hash_list, current_legal_
     return storeResult(tt, board_hash, False), None
 
 def timed_solve(state, tt, time_limit, board): 
-    global start
+    global start, node_count
+    node_count = 0
     start = time.process_time()
     cdef list hash_list = generate_hash(board)
     cdef unsigned long long board_hash = generate_board_hash(board, hash_list)
