@@ -6,6 +6,7 @@
 # Written by Martin Mueller
 
 import random
+from typing import overload
 from game_basics import EMPTY, BLACK, WHITE, isEmptyBlackWhite, opponent
 import heapq
 
@@ -34,15 +35,23 @@ class Clobber_1d(object):
             s += char_map[p]
         return s
         
-    def __init__(self, start_position, first_player = WHITE): 
+
+    def __init__(self, start_position, first_player = WHITE, moves = None): 
         # we take either a board size for standard "BWBW...", 
         # or a custom start string such as "BWEEWWB"
-        if type(start_position) == int:
-            self.init_board = Clobber_1d.standard_board(start_position)
-        else:
-            assert type(start_position) == str
-            self.init_board = Clobber_1d.custom_board(start_position)
-        self.resetGame(first_player)
+        if moves == None:
+            if type(start_position) == int:
+                self.init_board = Clobber_1d.standard_board(start_position)
+            else:
+                assert type(start_position) == str
+                self.init_board = Clobber_1d.custom_board(start_position)
+            self.resetGame(first_player)
+        else: 
+            self.board = start_position
+            self.toPlay = first_player
+            self.moves = moves
+
+    
 
     def resetGame(self, first_player):
         self.board = self.init_board
