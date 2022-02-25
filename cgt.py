@@ -11,6 +11,47 @@ win_move = None
 node_count = 0
 start = time.process_time()
 
+def saqib_board_CGT(state):
+    board = state.board
+    sub_games = []
+    sub_games_inverses = []
+
+    # board = state.board
+
+    game = []
+    game_inverse = []
+    last_index = len(board) - 1
+    for index, value in enumerate(board):
+        if value == 0 or index == last_index:
+            if(index == last_index):
+                game.append(value)
+                game_inverse.append(2 + 1 - value)
+            if game_inverse in sub_games:
+                sub_games.remove(game_inverse)
+                sub_games_inverses.remove(game)
+            elif game in sub_games:
+                sub_games.remove(game)
+                sub_games_inverses.remove(game_inverse)
+            elif len(game) > 1:
+                sub_games.append(game)
+                sub_games_inverses.append(game_inverse)
+
+            game = []
+            game_inverse = []
+        else:
+            game.append(value)
+            game_inverse.append(2 + 1 - value)
+   
+    combined_games = []
+    for sub_game in sub_games:
+        combined_games += sub_game + [0]
+    
+    if(len(combined_games) > 1):
+        del combined_games[-1]
+
+    new_state = Clobber_1d(combined_games, state.toPlay, state.moves)
+    return new_state
+
 # TODO: Do CGT updates
 def update_board_CGT(state):
     inverse_board = [(2+1-x) if x != 0 else 0 for x in state.board]
