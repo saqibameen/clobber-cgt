@@ -97,11 +97,7 @@ class Clobber_1d(object):
     def staticallyEvaluateForToPlay(self):
         winColor = self.winner()
         return winColor == self.toPlay
-    
-    def heuristicEvaluation(self, legalmoves):
-        board = self.board
-        self.priority = -len(legalmoves) # board.count(self.toPlay) # set priority as the count of current player's positions
-    
+
     def moveNumber(self):
         return len(self.moves)
 
@@ -215,18 +211,6 @@ class Clobber_1d(object):
         for color in self.board:
             c = 3*c + color
         return 2*c + self.toPlay - 1 # BLACK = 1, WHITE = 2
-
-    # simulate one game from the current state until the end
-    def simulate(self):
-        assert False # todo: this is for Tic Tac Toe, needs fixing for Clobber
-        i = 0
-        if not self.endOfGame():
-            allMoves = self.legalMoves()
-            random.shuffle(allMoves)
-            while not self.endOfGame():
-                self.play(allMoves[i])
-                i += 1
-        return self.winner(), i
 
     def print(self):
         print(Clobber_1d.to_string(self.board))

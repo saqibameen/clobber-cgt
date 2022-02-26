@@ -3,13 +3,12 @@
 # Written by Martin Mueller
 
 import time
-from game_basics import colorAsString, isBlackWhite, opponent
 from clobber_1d import Clobber_1d
 
 
 win_move = None
 node_count = 0
-start = time.process_time()
+start = None
 
 def saqib_board_CGT(state):
     board = state.board
@@ -95,14 +94,12 @@ def negamaxBoolean(state, tt, time_limit):
     if result != None:
         return result, win_move
     if state.endOfGame():
-        result = state.staticallyEvaluateForToPlay()
+        result = False
         return storeResult(tt, state, result), win_move
 
     for m in state.legalMoves():
-        
-        # print(f"Move: {m}")
         state.play(m)
-        new_state = update_board_CGT(state)
+        new_state = saqib_board_CGT(state)
         success = not negamaxBoolean(new_state, tt, time_limit)[0]
         state.undoMove()
         timeUsed = time.process_time() - start
@@ -116,9 +113,10 @@ def negamaxBoolean(state, tt, time_limit):
     return storeResult(tt, state, False), None
 
 
-def timed_solve(state, tt, time_limit, _): 
-    global start
-    start = time.process_time()
+def timed_solve(state, tt, time_limit, _):
+    global start, node_count
+    start = time.process_time() 
+    node_count = 0
     win, m = negamaxBoolean(state, tt, time_limit)
     timeUsed = time.process_time() - start
     return win, m, timeUsed, node_count

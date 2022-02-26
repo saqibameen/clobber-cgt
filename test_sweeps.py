@@ -2,7 +2,7 @@ import random
 from clobber_1d import Clobber_1d
 from game_basics import BLACK, WHITE, colorAsString
 from transposition_table_simple import TranspositionTable
-from negamax_no_hash import timed_solve as regular_hash_solver
+from negamax_tt_martin import timed_solve as martin_timed_solve
 from cgt import timed_solve as cgt_timed_solve
 import time
 import sys
@@ -44,31 +44,37 @@ def worst_case_testing():
         state = Clobber_1d(board, BLACK)
         state2 = Clobber_1d(board, BLACK)
 
+        time_allowed = 10
+
         # Playing the game, main
-        isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, BLACK, 100, board, cgt_timed_solve)
-        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, BLACK, 100, board, regular_hash_solver)
+        isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, BLACK, time_allowed, board, cgt_timed_solve)
+        print("[CGT_Black___] : ", isWin, " : ", win_move, " : ", timeUsed, " : ", node_count)
 
-
-        print("[CGT_Black] : ", isWin, " : ", win_move, " : ", timeUsed, " : ", node_count)
-        print("[MMM_Black] : ", isWin2, " : ", win_move2, " : ", timeUsed2, " : ", node_count2)
+        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, BLACK, time_allowed, board, martin_timed_solve)
+        print("[Martin_Black] : ", isWin2, " : ", win_move2, " : ", timeUsed2, " : ", node_count2)
         print()
 
-        # if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B") or (isWin3 != "W" and isWin3 != "B")):
-        #     assert isWin == isWin2 == isWin3 and win_move == win_move2 == win_move3
+        try:
+            assert isWin == isWin2
+        except AssertionError:
+            print("assertion error.")
+            print("===============================")
         
         state = Clobber_1d(board, WHITE)
         state2 = Clobber_1d(board, WHITE)
 
-        isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, WHITE, 100, board, cgt_timed_solve)
-        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, WHITE, 100, board, regular_hash_solver)
-    
-        
-        print("[CGT_White] : ", isWin, " : ", win_move, " : ", timeUsed, " : ", node_count)
-        print("[MMN_White] : ", isWin2, " : ", win_move2, " : ", timeUsed2, " : ", node_count2)
+        isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, WHITE, time_allowed, board, cgt_timed_solve)
+        print("[CGT_White___] : ", isWin, " : ", win_move, " : ", timeUsed, " : ", node_count)
+
+        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, WHITE, time_allowed, board, martin_timed_solve)
+        print("[Martin_White] : ", isWin2, " : ", win_move2, " : ", timeUsed2, " : ", node_count2)
         print()
 
-        # if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B")):
-        #     assert isWin == isWin2 and win_move == win_move2
+        try:
+            assert isWin == isWin2
+        except AssertionError:
+            print("assertion error.")
+            print("===============================")
 
         # results.write(f"{timeUsed5},{len(board)}")
         # results.write("\n")
@@ -93,28 +99,38 @@ def random_test_suit_testing():
 
         # Playing the game, main
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, BLACK, time_to_solve, board, cgt_timed_solve)
-        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, BLACK, time_to_solve, board, regular_hash_solver)
+        print("[CGT_Black___] : ", isWin, " : ", win_move, " : ", timeUsed, " : ", node_count)
 
-
-        print("[CGT_Black] : ", isWin, " : ", win_move, " : ", timeUsed, " : ", node_count)
-        print("[MMM_Black] : ", isWin2, " : ", win_move2, " : ", timeUsed2, " : ", node_count2)
+        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, BLACK, time_to_solve, board, martin_timed_solve)
+        print("[Martin_Black] : ", isWin2, " : ", win_move2, " : ", timeUsed2, " : ", node_count2)
         print()
         
+        if(isWin2 == "W" or isWin2 == "B" or isWin != "W" or isWin != "B"):
+            try:
+                assert isWin == isWin2 
+            except AssertionError:
+                print("assertion error.")
+                print("===============================")
      
         state = Clobber_1d(board, WHITE)
         state2 = Clobber_1d(board, WHITE)
 
 
         isWin, win_move, timeUsed, node_count = test_solve_with_tt(state, WHITE, time_to_solve, board, cgt_timed_solve)
-        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, WHITE, time_to_solve, board, regular_hash_solver)
-        
-        print("[CGT_White] : ", isWin, " : ", win_move, " : ", timeUsed, " : ", node_count)
-        print("[MMN_White] : ", isWin2, " : ", win_move2, " : ", timeUsed2, " : ", node_count2)
+        print("[CGT_White___] : ", isWin, " : ", win_move, " : ", timeUsed, " : ", node_count)
+
+        isWin2, win_move2, timeUsed2, node_count2 = test_solve_with_tt(state2, WHITE, time_to_solve, board, martin_timed_solve)        
+        print("[Martin_White] : ", isWin2, " : ", win_move2, " : ", timeUsed2, " : ", node_count2)
         print()
 
-        # if(isWin2 == "W" or isWin2 == "B" or (isWin != "W" and isWin != "B")):
-        #     assert isWin == isWin2 and win_move == win_move2 
+
+        if(isWin2 == "W" or isWin2 == "B" or isWin != "W" or isWin != "B"):
+            try:
+                assert isWin == isWin2 
+            except AssertionError:
+                print("assertion error.")
+                print("===============================")
 
 
-# worst_case_testing()
-random_test_suit_testing()
+worst_case_testing()
+# random_test_suit_testing()

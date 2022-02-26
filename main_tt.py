@@ -5,7 +5,7 @@ from cgt import timed_solve as cgt_timed_solve
 import time
 import sys
 
-mode = "test" # run or test
+mode = "run" # run or test
 
 def test_solve_with_cgt(state, player, time_limit, board):
     tt = TranspositionTable()
