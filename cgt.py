@@ -29,7 +29,7 @@ def saqib_board_CGT(state):
             if game_inverse in sub_games:
                 sub_games.remove(game_inverse)
                 sub_games_inverses.remove(game)
-            if game_inverse[::-1] in sub_games:
+            elif game_inverse[::-1] in sub_games:
                 sub_games.remove(game_inverse[::-1])
                 sub_games_inverses.remove(game[::-1])
             elif game in sub_games:
