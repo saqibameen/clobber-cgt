@@ -14,9 +14,6 @@ start = time.process_time()
 def saqib_board_CGT(state):
     board = state.board
     sub_games = []
-    sub_games_inverses = []
-
-    # board = state.board
 
     game = []
     game_inverse = []
@@ -28,19 +25,12 @@ def saqib_board_CGT(state):
                 game_inverse.append(2 + 1 - value)
             if game_inverse in sub_games:
                 sub_games.remove(game_inverse)
-                sub_games_inverses.remove(game)
             elif game_inverse[::-1] in sub_games:
                 sub_games.remove(game_inverse[::-1])
-                sub_games_inverses.remove(game[::-1])
-            elif game in sub_games:
-                sub_games.remove(game)
-                sub_games_inverses.remove(game_inverse)
-            elif game[::-1] in sub_games:
-                sub_games.remove(game[::-1])
-                sub_games_inverses.remove(game_inverse[::-1])
+            # elif game[::-1] in sub_games:
+            #     sub_games.remove(game[::-1])
             elif len(game) > 1 and len(set(game)) != 1:
                 sub_games.append(game)
-                sub_games_inverses.append(game_inverse)
 
             game = []
             game_inverse = []
