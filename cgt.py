@@ -23,16 +23,22 @@ def saqib_board_CGT(state):
     last_index = len(board) - 1
     for index, value in enumerate(board):
         if value == 0 or index == last_index:
-            if(index == last_index):
+            if(index == last_index and value != 0):
                 game.append(value)
                 game_inverse.append(2 + 1 - value)
             if game_inverse in sub_games:
                 sub_games.remove(game_inverse)
                 sub_games_inverses.remove(game)
+            if game_inverse[::-1] in sub_games:
+                sub_games.remove(game_inverse[::-1])
+                sub_games_inverses.remove(game[::-1])
             elif game in sub_games:
                 sub_games.remove(game)
                 sub_games_inverses.remove(game_inverse)
-            elif len(game) > 1:
+            elif game[::-1] in sub_games:
+                sub_games.remove(game[::-1])
+                sub_games_inverses.remove(game_inverse[::-1])
+            elif len(game) > 1 and len(set(game)) != 1:
                 sub_games.append(game)
                 sub_games_inverses.append(game_inverse)
 
