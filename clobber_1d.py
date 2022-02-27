@@ -115,6 +115,22 @@ class Clobber_1d(object):
                     moves.append((i, i-1))
                 if i < last and self.board[i+1] == opp:
                     moves.append((i, i+1))
+        if(len(moves) > 3):
+            moves[0], moves[len(moves)//2] = moves[len(moves)//2], moves[0]
+
+        return moves
+
+    def legalMovesOriginal(self):
+        # To do: this is super slow. Should keep track of moves
+        moves = []
+        opp = self.opp_color()
+        last = len(self.board) - 1
+        for i, p in enumerate(self.board):
+            if p == self.toPlay:
+                if i > 0 and self.board[i-1] == opp:
+                    moves.append((i, i-1))
+                if i < last and self.board[i+1] == opp:
+                    moves.append((i, i+1))
         return moves
     
     def legalMoves_PQ(self):

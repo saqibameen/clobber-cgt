@@ -96,8 +96,8 @@ def negamaxBoolean(state, tt, time_limit):
     if state.endOfGame():
         result = False
         return storeResult(tt, state, result), win_move
-
-    for m in state.legalMoves():
+    moves = state.legalMoves()
+    for m in moves:
         state.play(m)
         new_state = saqib_board_CGT(state)
         success = not negamaxBoolean(new_state, tt, time_limit)[0]
