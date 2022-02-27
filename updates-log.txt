@@ -1,0 +1,8 @@
+1- Simplification of games: O(N)
+    * Remove sub-games which are inverse of each other. G + (-G) = 0
+    * Remove sub-games which show symmetry. Second player win by strategy stealing.
+    * Remove all sub-games with single type of elements. (because all are 0 games)
+    * Remove (.) at the end of the board. 
+    * Replace multiple (.) with single (.)
+2- Improve ordering.
+    * Play sub-game from the middle. Increases chances of occurrence of situations mentioned in 1.
