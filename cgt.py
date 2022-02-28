@@ -16,26 +16,45 @@ def saqib_board_CGT(state):
 
     game = []
     game_inverse = []
+
+    is_game_m_n = True
+    is_already_flipped = False
+
     last_index = len(board) - 1
     for index, value in enumerate(board):
         if value == 0 or index == last_index:
             if(index == last_index and value != 0):
                 game.append(value)
                 game_inverse.append(2 + 1 - value)
-            if game_inverse in sub_games:
+
+            if(len(game) > 3 and is_game_m_n and is_already_flipped):
+                if (game[len(game) - 1] != game[len(game) - 2]):
+                    is_game_m_n = False
+            else:
+                is_game_m_n = False
+            
+            if is_game_m_n:
+                is_game_m_n = True
+                is_already_flipped = False
+            elif game_inverse in sub_games:
                 sub_games.remove(game_inverse)
             elif game_inverse[::-1] in sub_games:
                 sub_games.remove(game_inverse[::-1])
-            # elif game[::-1] in sub_games:
-            #     sub_games.remove(game[::-1])
             elif len(game) > 1 and len(set(game)) != 1:
                 sub_games.append(game)
 
             game = []
             game_inverse = []
+            is_game_m_n = True
+            is_already_flipped = False
         else:
             game.append(value)
             game_inverse.append(2 + 1 - value)
+
+            if(len(game) > 1 and is_game_m_n and game[len(game) - 1] != game[len(game) - 2]):
+                if(len(game) < 3): is_game_m_n = False
+                if(not is_already_flipped): is_already_flipped = True
+                else: is_game_m_n = False
    
     combined_games = []
     for sub_game in sub_games:
@@ -117,6 +136,7 @@ def timed_solve(state, tt, time_limit, _):
     global start, node_count
     start = time.process_time() 
     node_count = 0
-    win, m = negamaxBoolean(state, tt, time_limit)
+    new_state = saqib_board_CGT(state)
+    win, m = negamaxBoolean(new_state, tt, time_limit)
     timeUsed = time.process_time() - start
     return win, m, timeUsed, node_count
