@@ -8,3 +8,6 @@
     * Play sub-game from the middle. Increases chances of occurrence of situations mentioned in 1.
 3- Removed all B^m W^n moves: 
     Lemma 3.1 From https://www.researchgate.net/publication/227859257_An_introduction_to_Clobber
+
+Tried and Did not work:
+1- Pyramid Scheme of Ordering
