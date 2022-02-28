@@ -12,7 +12,11 @@ start = None
 
 # combine and sort in such a way there are multiple lists inside the moves. In the combined, first element should be first element of first list, second element should be first element of second list, etc.
 def combine_sort_alternate(moves):
-    if len(moves) == 1: return moves[0]
+    # print(moves)
+    if len(moves) == 0: return []
+    elif len(moves) == 1: 
+        # print("moves", moves)
+        return moves[0]
     total_length = sum(len(move) for move in moves)
     # print(moves)
     combined_moves = []
@@ -27,6 +31,11 @@ def combine_sort_alternate(moves):
 
     # print(combined_moves)
     assert len(combined_moves) == total_length
+    # Check all th elements are in the combined_moves
+    # for move in moves:
+    #     for m in move:
+    #         assert m in combined_moves
+
     return combined_moves
 
 
@@ -110,6 +119,7 @@ def saqib_board_CGT(state):
                 if(not is_already_flipped): is_already_flipped = True
                 else: is_game_m_n = False
    
+    # print("sub_games ", sub_games)
     combined_games = []
     custom_legal_moves = []
     sub_games_legal_moves = []
@@ -118,16 +128,19 @@ def saqib_board_CGT(state):
     index_to_swap_with = []
     for sub_game in sub_games:
         legal_moves = gen_custom_legal_moves(sub_game, state.toPlay, state.opp_color(), index_offset)
+        # print("legal_moves: ", legal_moves)
         if(len(legal_moves) > 2):
             legal_moves = custom_sort(legal_moves)
-            sub_games_legal_moves.append(legal_moves)
+            # sub_games_legal_moves.append(legal_moves)
             index_to_swap_with.append((len(legal_moves) // 2) + legal_moves_offset)
+        sub_games_legal_moves.append(legal_moves)
+        
         index_offset += (len(sub_game) + 1)
         legal_moves_offset += len(legal_moves)
         custom_legal_moves.extend(legal_moves)
         combined_games += sub_game + [0]
     
-    sorted_all_legal_moves = combine_sort_alternate(sub_games_legal_moves) if len(sub_games_legal_moves) > 0 else []
+    sorted_all_legal_moves = combine_sort_alternate(sub_games_legal_moves)
     # if(len(custom_legal_moves) > 3):
     # for i, value in enumerate(index_to_swap_with):
     #     custom_legal_moves[i], custom_legal_moves[value] = custom_legal_moves[value], custom_legal_moves[i]
@@ -135,6 +148,7 @@ def saqib_board_CGT(state):
     if(len(combined_games) > 1):
         del combined_games[-1]
     # print(sorted_all_legal_moves)
+    # print("combined_games", combined_games)
     new_state = Clobber_1d(combined_games, state.toPlay, state.moves)
     return new_state, sorted_all_legal_moves
 
@@ -190,6 +204,7 @@ def negamaxBoolean(state, tt, time_limit, legal_moves):
     for m in legal_moves:
         state.play(m)
         new_state, legal_moves = saqib_board_CGT(state)
+        # print("new_state", new_state.board, new_state.moves, new_state.toPlay, legal_moves)
         success = not negamaxBoolean(new_state, tt, time_limit, legal_moves)[0]
         state.undoMove()
         timeUsed = time.process_time() - start
