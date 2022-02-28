@@ -5,6 +5,7 @@ from transposition_table_simple import TranspositionTable
 # from cgt import timed_solve as cgt_timed_solve
 from negamax_tt_martin import timed_solve as negamax_tt_timed_solve
 import json
+import pickle
 
 
 
@@ -52,18 +53,14 @@ for i in board_lengths:
     board_counter += 3**i
 
 print(board_counter)
-# exit()
 
 zero_endgame_f = open("zeroendgamedb.txt", "w")
+all_endgame_f = open("allendgamedb.txt", "w")
 
 counter = 0
-board_dict = {}
-# zero_game_dict = {}
 for board in board_list:
 
     board = "".join(board)
-    board_dict[board] = list()
-
     for player in players:
         counter += 1
         print(f"Board: {board} Player: {player}")
@@ -77,23 +74,27 @@ for board in board_list:
 
         state = Clobber_1d(board, player)
         isWin, _, _, _ = solve_with_given_solver(state, player, time_limit, board)
-        board_dict[board].append(isWin)
+        if(player == BLACK):
+            B_result = isWin
+        elif(player == WHITE):
+            W_result = isWin
 
-    B_result, W_result = board_dict[board]
     if(B_result == "B" and W_result == "W"):
         print(f"Game Value: N (first player win)")
-        board_dict[board].append("N")
+        all_endgame_f.write(board + " " + "N"+ "\n")
+
     elif(B_result == "W" and W_result == "B"):
         print(f"Game Value: P (second player win)")
-        board_dict[board].append("P")
         zero_endgame_f.write(board + "\n")
-        # zero_game_dict[board] = "P"
+        all_endgame_f.write(board + " " + "P"+ "\n")
+
     elif(B_result == "B" and W_result == "B"):
         print(f"Game Value: L (Balck always win)")
-        board_dict[board].append("L")  #L means B wins in any case
+        all_endgame_f.write(board + " " + "L" + "\n")
+
     elif(B_result == "W" and W_result == "W"):
         print(f"Game Value: R (White always win)")
-        board_dict[board].append("R")  #R means W wins in any case
+        all_endgame_f.write(board + " " + "R" + "\n")
 
     print()
     print()
@@ -101,14 +102,9 @@ for board in board_list:
 
 print(f"Total games: {counter}")
 
-# Saving endgame databases
-with open('endgamedb.json', 'w') as fp:
-    json.dump(board_dict, fp,  indent=4)
 
 zero_endgame_f.close()
-# Saving zero endgame databases
-# with open('zeroendgamedb.json', 'w') as fp:
-#     json.dump(zero_game_dict, fp,  indent=4)
+all_endgame_f.close()
 
 # print(board_dict)
 print(board_counter)
