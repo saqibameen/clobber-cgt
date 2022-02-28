@@ -46,11 +46,19 @@ board_length = 10
 board_lengths = range(board_length, 0, -1)
 
 board_list = []
+board_counter = 0 
 for i in board_lengths:
     board_list += (product(positions, repeat=i))
+    board_counter += 3**i
+
+print(board_counter)
+# exit()
+
+zero_endgame_f = open("zeroendgamedb.txt", "w")
 
 counter = 0
 board_dict = {}
+# zero_game_dict = {}
 for board in board_list:
 
     board = "".join(board)
@@ -78,6 +86,8 @@ for board in board_list:
     elif(B_result == "W" and W_result == "B"):
         print(f"Game Value: P (second player win)")
         board_dict[board].append("P")
+        zero_endgame_f.write(board + "\n")
+        # zero_game_dict[board] = "P"
     elif(B_result == "B" and W_result == "B"):
         print(f"Game Value: L (Balck always win)")
         board_dict[board].append("L")  #L means B wins in any case
@@ -95,4 +105,10 @@ print(f"Total games: {counter}")
 with open('endgamedb.json', 'w') as fp:
     json.dump(board_dict, fp,  indent=4)
 
+zero_endgame_f.close()
+# Saving zero endgame databases
+# with open('zeroendgamedb.json', 'w') as fp:
+#     json.dump(zero_game_dict, fp,  indent=4)
+
 # print(board_dict)
+print(board_counter)
