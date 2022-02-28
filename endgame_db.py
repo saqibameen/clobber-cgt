@@ -43,12 +43,12 @@ positions = ["B", "W", "."]
 players = ["B", "W"]
 # board_list = list(product(positions, repeat=6)) + list(product(positions, repeat=5)) + (list(product(positions, repeat=4))) + list(product(positions, repeat=3)) + list(product(positions, repeat=2)) + list(product(positions, repeat=1))
 
-board_length = 10
-board_lengths = range(board_length, 0, -1)
+board_length = [10]
+# board_lengths = range(board_length, 0, -1)
 
 board_list = []
 board_counter = 0 
-for i in board_lengths:
+for i in board_length:
     board_list += (product(positions, repeat=i))
     board_counter += 3**i
 
@@ -56,11 +56,17 @@ print(board_counter)
 
 zero_endgame_f = open("zeroendgamedb.txt", "w")
 all_endgame_f = open("allendgamedb.txt", "w")
+endgame_dict = {}
 
 counter = 0
 for board in board_list:
 
+
+    board_value = ""
     board = "".join(board)
+    board = board.rstrip(".")
+    board = board.lstrip(".")
+    
     for player in players:
         counter += 1
         print(f"Board: {board} Player: {player}")
@@ -80,25 +86,34 @@ for board in board_list:
             W_result = isWin
 
     if(B_result == "B" and W_result == "W"):
+        board_value = "N"
         print(f"Game Value: N (first player win)")
-        all_endgame_f.write(board + " " + "N"+ "\n")
 
     elif(B_result == "W" and W_result == "B"):
+        board_value = "P"
         print(f"Game Value: P (second player win)")
-        zero_endgame_f.write(board + "\n")
-        all_endgame_f.write(board + " " + "P"+ "\n")
 
     elif(B_result == "B" and W_result == "B"):
+        board_value = "L"
         print(f"Game Value: L (Balck always win)")
-        all_endgame_f.write(board + " " + "L" + "\n")
 
     elif(B_result == "W" and W_result == "W"):
+        board_value = "R"
         print(f"Game Value: R (White always win)")
-        all_endgame_f.write(board + " " + "R" + "\n")
+
+    endgame_dict[board] = board_value
 
     print()
     print()
         
+# Saving database
+for board, value in endgame_dict.items():
+    if(value == "P"):
+        zero_endgame_f.write(board + "\n")
+    
+    all_endgame_f.write(board + " " + value + "\n")
+
+
 
 print(f"Total games: {counter}")
 
@@ -106,5 +121,4 @@ print(f"Total games: {counter}")
 zero_endgame_f.close()
 all_endgame_f.close()
 
-# print(board_dict)
 print(board_counter)
