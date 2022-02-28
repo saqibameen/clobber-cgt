@@ -2,7 +2,7 @@ from game_basics import BLACK, WHITE, colorAsString
 from clobber_1d import Clobber_1d
 from game_basics import BLACK, WHITE, colorAsString
 from transposition_table_simple import TranspositionTable
-from negamax_no_hash import timed_solve as timed_solve_no_hash
+from negamax_tt_martin import timed_solve as timed_solve_no_hash
 from cgt import timed_solve as cgt_timed_solve
 import time
 import sys
@@ -20,12 +20,25 @@ def solve_with_given_solver(state, player, time_limit, board):
         to = to.replace(')', '')
         win_move = "{}-{}".format(src, to)
 
+    # if(isWin == None):
+    #     isWin = "?"
+    # elif((player == BLACK and isWin) or (player == WHITE and not isWin)):
+    #     isWin = "B"
+    # elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
+    #     isWin = "W"
+
     if(isWin == None):
         isWin = "?"
-    elif((player == BLACK and isWin) or (player == WHITE and not isWin)):
+    elif((player == BLACK and isWin)):
         isWin = "B"
-    elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
+    elif(player == WHITE and not isWin):
+        isWin = "B"
+        win_move = None
+    elif(player == WHITE and isWin):
         isWin = "W"
+    elif(player == BLACK and not isWin) :
+        isWin = "W"
+        win_move = None
 
     if mode == "run":
         print("{} {} {:.4f} {}\n".format(isWin, win_move, timeUsed, node_count))
