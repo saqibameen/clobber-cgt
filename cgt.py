@@ -5,6 +5,7 @@
 import time
 from clobber_1d import Clobber_1d
 from zero import zeros_db
+# from newdb import endgame_db
 
 win_move = None
 node_count = 0
@@ -16,6 +17,9 @@ def saqib_board_CGT(state):
 
     game = []
     game_inverse = []
+
+    # L_game = 0
+    # R_game = 0
 
     is_game_m_n = True
     is_already_flipped = False
@@ -42,6 +46,11 @@ def saqib_board_CGT(state):
                 sub_games.remove(game_inverse[::-1])
             elif len(game) > 1 and len(set(game)) != 1 and tuple(game) not in zeros_db:
                 sub_games.append(game)
+                # game_tuple = tuple(game)
+                # if(endgame_db.get(game_tuple) == 'L'):
+                #     L_game += 1
+                # elif(endgame_db.get(game_tuple) == 'R'):
+                #     R_game += 1
 
             game = []
             game_inverse = []
@@ -57,49 +66,19 @@ def saqib_board_CGT(state):
                 else: is_game_m_n = False
    
     combined_games = []
+
+    # if(L_game == len(sub_games) and len(sub_games) !=0):
+    #     sub_games = [[1,1,2]]
+    # elif(R_game == len(sub_games) and len(sub_games) !=0):
+    #     sub_games = [[2,2,1]]
+
     for sub_game in sub_games:
         combined_games += sub_game + [0]
-    
+
     if(len(combined_games) > 1):
         del combined_games[-1]
 
     new_state = Clobber_1d(combined_games, state.toPlay, state.moves)
-    return new_state
-
-# TODO: Do CGT updates
-def update_board_CGT(state):
-    inverse_board = [(2+1-x) if x != 0 else 0 for x in state.board]
-    # print(f"real: {state.board}")
-    # print(f"inve: {inverse_board}")
-
-    sub_games = "".join([str(x) for x in state.board]).split("0")
-    inverse_sub_games = "".join([str(x) for x in inverse_board]).split("0")
-    sub_games = [x for x in sub_games if x != ""]
-    inverse_sub_games = [x for x in inverse_sub_games if x != ""]
-
-    to_remove = []
-    for i in range(len(sub_games)):
-        inverse_subgame = inverse_sub_games[i]
-        if(inverse_subgame in sub_games):
-            to_remove.append(sub_games[i])
-            to_remove.append(inverse_subgame)
-
-        if(sub_games[i] in sub_games[i+1:]):
-            to_remove.append(sub_games[i])
-
-    new_sub_game = []
-    # Removing moves
-    for game in sub_games:
-        if(game not in to_remove):
-            new_sub_game.append(game)
-
-    
-    new_sub_game = [int(x) for x in list('0'.join(new_sub_game))]
-
-    for i in range(len(state.board) - len(new_sub_game)):
-        new_sub_game.append(0)
-
-    new_state = Clobber_1d(new_sub_game, state.toPlay, state.moves)
     return new_state
 
 def storeResult(tt, state, result):
