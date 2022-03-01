@@ -5,6 +5,7 @@
 # Written by Martin Mueller
 
 import random
+from libcpp cimport bool
 
 
 COLOR_MAPPING = {
@@ -12,10 +13,13 @@ COLOR_MAPPING = {
     "B": 1,
     "W": 2
 }
-class TranspositionTable():
+cdef class TranspositionTable():
 # Table is stored in a dictionary, with board code as key, 
 # and minimax score as the value
     # Empty dictionary
+
+    cdef dict table
+
     def __init__(self):
         self.table = {}
 
@@ -23,7 +27,7 @@ class TranspositionTable():
     def __repr__(self):
         return self.table.__repr__()
         
-    def store(self, code, score):
+    cpdef void store(self, code, score):
         self.table[code] = score
     
     # Python dictionary returns 'None' if key not found by get()

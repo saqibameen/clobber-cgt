@@ -3,20 +3,21 @@
 # Written by Martin Mueller
 
 import time
-from clobber_1d import Clobber_1d
+from clobber_1d_cy import Clobber_1d
 from zero import zeros_db
 # from newdb import endgame_db
 
-win_move = None
-node_count = 0
-start = None
+cdef tuple win_move = None
+cdef unsigned long node_count = 0
+cdef double start = time.process_time()
 
-def saqib_board_CGT(state):
-    board = state.board
-    sub_games = []
+cdef saqib_board_CGT(state):
+    # board = state.board
+    board = state.getBoard()
+    cdef list sub_games = []
 
-    game = []
-    game_inverse = []
+    cdef list game = []
+    cdef list game_inverse = []
 
     # L_game = 0
     # R_game = 0
@@ -24,7 +25,7 @@ def saqib_board_CGT(state):
     is_game_m_n = True
     is_already_flipped = False
 
-    last_index = len(board) - 1
+    cdef unsigned short int last_index = len(board) - 1
     for index, value in enumerate(board):
         if value == 0 or index == last_index:
             if(index == last_index and value != 0):
@@ -65,7 +66,7 @@ def saqib_board_CGT(state):
                 if(not is_already_flipped): is_already_flipped = True
                 else: is_game_m_n = False
    
-    combined_games = []
+    cdef list combined_games = []
 
     # if(L_game == len(sub_games) and len(sub_games) !=0):
     #     sub_games = [[1,1,2]]
@@ -78,14 +79,14 @@ def saqib_board_CGT(state):
     if(len(combined_games) > 1):
         del combined_games[-1]
 
-    new_state = Clobber_1d(combined_games, state.toPlay, state.moves)
+    new_state = Clobber_1d(combined_games, state.getToPlay(), state.getMoves())
     return new_state
 
-def storeResult(tt, state, result):
+cdef storeResult(tt, state, result):
     tt.store(state.code(), result)
     return result
 
-def negamaxBoolean(state, tt, time_limit):
+cdef negamaxBoolean(state, tt, time_limit):
     global win_move, node_count, start
     node_count += 1
     result = tt.lookup(state.code())

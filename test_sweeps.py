@@ -1,9 +1,15 @@
 import random
-from clobber_1d import Clobber_1d
+# from clobber_1d import Clobber_1d
+from clobber_1d_cy import Clobber_1d
 from game_basics import BLACK, WHITE, colorAsString
-from transposition_table_simple import TranspositionTable
+# from transposition_table_simple import TranspositionTable
+from transposition_table_simple_cy import TranspositionTable
+
 from negamax_tt_martin import timed_solve as martin_timed_solve
-from cgt import timed_solve as cgt_timed_solve
+# from cgt import timed_solve as cgt_timed_solve
+from cgt_cy import timed_solve as cgt_timed_solve
+
+
 import time
 import sys
 
