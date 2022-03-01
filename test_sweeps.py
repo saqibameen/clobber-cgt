@@ -14,10 +14,16 @@ def test_solve_with_tt(state, player, time_limit, board, solver):
     
     if(isWin == None):
         isWin = "?"
-    elif((player == BLACK and isWin) or (player == WHITE and not isWin)):
+    elif((player == BLACK and isWin)):
         isWin = "B"
-    elif((player == BLACK and not isWin) or (player == WHITE and isWin)):
+    elif(player == WHITE and not isWin):
+        isWin = "B"
+        win_move = None
+    elif(player == WHITE and isWin):
         isWin = "W"
+    elif(player == BLACK and not isWin) :
+        isWin = "W"
+        win_move = None
 
     # open logs file in append mode and create if does not exist.
     # logs = open("logs.txt", "a")
