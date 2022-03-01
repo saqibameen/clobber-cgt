@@ -4,7 +4,7 @@
 
 import time
 from clobber_1d import Clobber_1d
-
+from zero import zeros_db
 
 win_move = None
 node_count = 0
@@ -40,7 +40,7 @@ def saqib_board_CGT(state):
                 sub_games.remove(game_inverse)
             elif game_inverse[::-1] in sub_games:
                 sub_games.remove(game_inverse[::-1])
-            elif len(game) > 1 and len(set(game)) != 1:
+            elif len(game) > 1 and len(set(game)) != 1 and tuple(game) not in zeros_db:
                 sub_games.append(game)
 
             game = []
