@@ -116,7 +116,6 @@ def timed_solve(state, tt, time_limit, _):
     global start, node_count
     start = time.process_time() 
     node_count = 0
-    new_state = saqib_board_CGT(state)
-    win, m = negamaxBoolean(new_state, tt, time_limit)
+    win, m = negamaxBoolean(state, tt, time_limit)
     timeUsed = time.process_time() - start
     return win, m, timeUsed, node_count
